@@ -1,54 +1,45 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { initApp } from "@freeappstore/sdk";
 import { type NavItem, PageHeader, Shell } from "@freeappstore/sdk/ui";
+import MixerWorkbench from "./components/MixerWorkbench";
 
-// "soundscape-lofi" is replaced by the CLI scaffold or deployment flow with this app's id.
 export const fas = initApp({ appId: "soundscape-lofi" });
 
-// The app's screens. Shell renders them as the navbar: a <nav> in its topbar
-// with the current screen highlighted, collapsing to a menu on phones.
-// Add one entry per primary screen; `title` becomes the browser tab title.
 const NAV: NavItem[] = [
-  { label: "Home", href: "/", title: "soundscape-lofi" },
-  { label: "About", href: "/about", title: "About — soundscape-lofi" },
+  { label: "Mixer", href: "/", title: "Soundscape Lo-Fi" },
+  { label: "About", href: "/about", title: "About — Soundscape Lo-Fi" },
 ];
 
 export default function App() {
   const [path, setPath] = useState(() => window.location.pathname);
 
-  // Keep the screen in step with the browser's back and forward buttons.
-  useEffect(() => {
-    const sync = () => setPath(window.location.pathname);
-    window.addEventListener("popstate", sync);
-    return () => window.removeEventListener("popstate", sync);
-  }, []);
-
-  // Nav clicks switch screens without a page load. Shell scrolls to the top
-  // and moves focus to the new screen's PageHeader.
-  const navigate = (href: string) => {
-    window.history.pushState(null, "", href);
-    setPath(window.location.pathname);
+  const navigate = (to: string) => {
+    window.history.pushState({}, "", to);
+    setPath(to);
   };
 
   return (
-    <Shell app={fas} appName={"soundscape-lofi"} nav={NAV} onNavigate={navigate}>
-      <div className="mx-auto w-full max-w-3xl p-4 sm:p-8">
-        {path === "/about" ? <About /> : <Home />}
+    <Shell app={fas} appName="Soundscape Lo-Fi" nav={NAV} onNavigate={navigate}>
+      <div className="mx-auto w-full max-w-6xl p-4 sm:p-6">
+        {path === "/about" ? <About /> : <MixerWorkbench />}
       </div>
     </Shell>
   );
 }
 
-function Home() {
-  return <PageHeader title={"Welcome to soundscape-lofi"} description="Edit web/src/App.tsx to get started." />;
-}
-
 function About() {
   return (
     <>
-      <PageHeader title="About" />
+      <PageHeader
+        title="Soundscape Lo-Fi"
+        description="Procedural Web Audio ambient mixer with 6 noise spectrums, brainwave entrainment protocols, and real-time FFT visualization."
+      />
       <p style={{ color: "var(--muted)" }}>
-        soundscape-lofi is a free app on <a href="https://freeappstore.online">FreeAppStore</a>.
+        soundscape-lofi is a free app on{" "}
+        <a href="https://freeappstore.online" target="_blank" rel="noopener noreferrer">
+          FreeAppStore
+        </a>
+        .
       </p>
     </>
   );
