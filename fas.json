@@ -2,5 +2,5 @@
   "applicationRoot": "web",
   "outputPath": "web/dist",
   "buildCommand": "pnpm build",
-  "appId": "my-app"
+  "appId": "soundscape-lofi"
 }

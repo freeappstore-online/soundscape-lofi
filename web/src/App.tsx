@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { initApp } from "@freeappstore/sdk";
 import { type NavItem, PageHeader, Shell } from "@freeappstore/sdk/ui";
 
-// "my-app" is replaced by the CLI scaffold or deployment flow with this app's id.
-export const fas = initApp({ appId: "my-app" });
+// "soundscape-lofi" is replaced by the CLI scaffold or deployment flow with this app's id.
+export const fas = initApp({ appId: "soundscape-lofi" });
 
 // The app's screens. Shell renders them as the navbar: a <nav> in its topbar
 // with the current screen highlighted, collapsing to a menu on phones.
 // Add one entry per primary screen; `title` becomes the browser tab title.
 const NAV: NavItem[] = [
-  { label: "Home", href: "/", title: "my-app" },
-  { label: "About", href: "/about", title: "About — my-app" },
+  { label: "Home", href: "/", title: "soundscape-lofi" },
+  { label: "About", href: "/about", title: "About — soundscape-lofi" },
 ];
 
 export default function App() {
@@ -31,7 +31,7 @@ export default function App() {
   };
 
   return (
-    <Shell app={fas} appName={"my-app"} nav={NAV} onNavigate={navigate}>
+    <Shell app={fas} appName={"soundscape-lofi"} nav={NAV} onNavigate={navigate}>
       <div className="mx-auto w-full max-w-3xl p-4 sm:p-8">
         {path === "/about" ? <About /> : <Home />}
       </div>
@@ -40,7 +40,7 @@ export default function App() {
 }
 
 function Home() {
-  return <PageHeader title={"Welcome to my-app"} description="Edit web/src/App.tsx to get started." />;
+  return <PageHeader title={"Welcome to soundscape-lofi"} description="Edit web/src/App.tsx to get started." />;
 }
 
 function About() {
@@ -48,7 +48,7 @@ function About() {
     <>
       <PageHeader title="About" />
       <p style={{ color: "var(--muted)" }}>
-        my-app is a free app on <a href="https://freeappstore.online">FreeAppStore</a>.
+        soundscape-lofi is a free app on <a href="https://freeappstore.online">FreeAppStore</a>.
       </p>
     </>
   );
