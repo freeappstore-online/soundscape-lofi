@@ -1,7 +1,7 @@
 /**
- * Pure Synthetic Web Audio Engine for SoundScape Lo-Fi
- * 100% Client-side procedural acoustic modeling for 23 ambient & neuro channels.
- * Zero external audio files or streaming CDNs.
+- Pure Synthetic Web Audio Engine for SoundScape Lo-Fi
+- 100% Client-side procedural acoustic modeling for 23 ambient & neuro channels.
+- Zero external audio files or streaming CDNs.
  */
 
 import { ChannelId } from '../types/soundscape';
@@ -974,7 +974,7 @@ export class SoundScapeAudioEngine {
   // 12. Mountain Stream
   private setupStream(nodes: ChannelAudioNodes) {
     let b0 = 0, b1 = 0;
-    const buffer = this.createLoopingBuffer(6, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(6, (i, _len, sr) => {
       const white = Math.random() * 2 - 1;
       b0 = 0.98 * b0 + white * 0.2;
       b1 = 0.94 * b1 + white * 0.4;
@@ -1041,7 +1041,7 @@ export class SoundScapeAudioEngine {
 
   // 14. Night Crickets
   private setupCrickets(nodes: ChannelAudioNodes) {
-    const buffer = this.createLoopingBuffer(4, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(4, (i, _len, sr) => {
       const t = i / sr;
       const cycle = t % 0.8;
       let envelope = 0;
@@ -1065,7 +1065,7 @@ export class SoundScapeAudioEngine {
   // 15. Cozy Coffee Shop (Muffled crowd murmur + subtle cup clatter transients)
   private setupCoffeeShop(nodes: ChannelAudioNodes) {
     let lastOut = 0;
-    const buffer = this.createLoopingBuffer(8, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(8, (i, _len, sr) => {
       const white = Math.random() * 2 - 1;
       lastOut = (lastOut + 0.03 * white) / 1.03;
       const t = i / sr;
@@ -1098,7 +1098,7 @@ export class SoundScapeAudioEngine {
 
   // 16. Vinyl Crackle (33-RPM dust pops + warm static)
   private setupVinyl(nodes: ChannelAudioNodes) {
-    const buffer = this.createLoopingBuffer(5, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(5, (i, _len, sr) => {
       const white = Math.random() * 2 - 1;
       let sample = white * 0.04; // Surface static hiss
 
@@ -1130,7 +1130,7 @@ export class SoundScapeAudioEngine {
 
   // 17. Train on Tracks (Rhythmic click-clack filtered transients)
   private setupTrain(nodes: ChannelAudioNodes) {
-    const buffer = this.createLoopingBuffer(4, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(4, (i, _len, sr) => {
       const t = i / sr;
       const beat = (t % 1.4); // Rail junction rhythm
       let impulse = 0;
@@ -1162,7 +1162,7 @@ export class SoundScapeAudioEngine {
   // 18. Airplane Cabin (Broadband ventilation + 160Hz engine cabin hum)
   private setupAirplane(nodes: ChannelAudioNodes) {
     let lastOut = 0;
-    const buffer = this.createLoopingBuffer(6, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(6, (i, _len, sr) => {
       const white = Math.random() * 2 - 1;
       lastOut = (lastOut + 0.04 * white) / 1.04;
       const t = i / sr;
@@ -1188,7 +1188,7 @@ export class SoundScapeAudioEngine {
 
   // 19. Clock Ticking (Alternating tick-tock cadence at 1Hz)
   private setupClock(nodes: ChannelAudioNodes) {
-    const buffer = this.createLoopingBuffer(2, (i, len, sr) => {
+    const buffer = this.createLoopingBuffer(2, (i, _len, sr) => {
       const t = i / sr;
       const sec = t % 1.0;
       let click = 0;
