@@ -93,8 +93,6 @@
   font-family: "Manrope", system-ui, sans-serif;
 }
 
-/* Dark mode: the SDK sets data-theme="dark" on <html> when the system is dark
-   or the user picks dark in the Shell's theme toggle. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --paper: #0f0f0f;
@@ -120,7 +118,6 @@
   --shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
 }
 
-/* Shell text preferences scale rem-based typography without blocking zoom. */
 :root[data-text="lg"] { font-size: 112.5%; }
 :root[data-text="sm"] { font-size: 87.5%; }
 
@@ -138,7 +135,6 @@ h3 {
 html { overflow-wrap: anywhere; }
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 img, video, canvas { max-width: 100%; }
-
 }
 
 /* Soundscape Lo-Fi custom utilities */
