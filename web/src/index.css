@@ -60,6 +60,9 @@
   --line: #e5e7eb;
   --line-strong: #d1d5db;
   --panel: #f9fafb;
+  --paper-card: var(--panel);
+  --paper-elevated: var(--paper-deep);
+  --ink-muted: var(--muted);
   --success: #16a34a;
   --warning: #d97706;
   --danger: #dc2626;
@@ -150,6 +153,12 @@ img, video, canvas { max-width: 100%; }
 .font-mono-tabular {
   font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
   font-variant-numeric: tabular-nums;
+}
+
+button,
+[role="button"] {
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 input[type="range"] {

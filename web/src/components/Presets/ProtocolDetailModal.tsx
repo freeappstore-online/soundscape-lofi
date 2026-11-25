@@ -174,7 +174,7 @@ export const ProtocolDetailModal: React.FC<ProtocolDetailModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close dossier modal"
-            className="p-1.5 sm:p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 transition shrink-0"
+            className="p-1.5 sm:p-2 rounded-xl text-slate-300 hover:text-[var(--ink)] bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 transition shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -265,7 +265,7 @@ export const ProtocolDetailModal: React.FC<ProtocolDetailModalProps> = ({
         <div className="p-3.5 sm:p-4 border-t border-[var(--line)] bg-[var(--paper-elevated)] flex items-center justify-end gap-2.5 sm:gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-[var(--ink-muted)] hover:text-white transition"
+            className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-[var(--ink-muted)] hover:text-[var(--ink)] transition"
           >
             Dismiss
           </button>

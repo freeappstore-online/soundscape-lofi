@@ -187,7 +187,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
               className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold transition flex items-center justify-center ${
                 channel.solo
                   ? 'bg-amber-400 text-slate-950 font-extrabold shadow-sm'
-                  : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-white border border-[var(--line)]'
+                  : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-[var(--ink)] border border-[var(--line)]'
               }`}
             >
               S
@@ -198,7 +198,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
               className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg transition flex items-center justify-center ${
                 channel.muted
                   ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                  : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-white border border-[var(--line)]'
+                  : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-[var(--ink)] border border-[var(--line)]'
               }`}
             >
               {channel.muted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -339,7 +339,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
                     className={`py-0.5 sm:py-1 px-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold transition text-center ${
                       (channel.customOptions?.binauralBeat || 10) === b.beat
                         ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                        : 'bg-[var(--paper-card)] text-[var(--ink-muted)] hover:text-white'
+                        : 'bg-[var(--paper-card)] text-[var(--ink-muted)] hover:text-[var(--ink)]'
                     }`}
                   >
                     {b.name}
@@ -395,7 +395,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
                 className={`py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold transition text-center ${
                   (channel.customOptions?.solfeggioFreq || 528) === f
                     ? 'bg-emerald-400 text-slate-950'
-                    : 'bg-[var(--paper-elevated)] text-slate-400 hover:text-white'
+                    : 'bg-[var(--paper-elevated)] text-slate-400 hover:text-[var(--ink)]'
                 }`}
               >
                 {f}Hz
@@ -422,7 +422,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
                 className={`py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold transition text-center ${
                   (channel.customOptions?.gammaPulseRate || 40) === r
                     ? 'bg-violet-400 text-slate-950'
-                    : 'bg-[var(--paper-elevated)] text-slate-400 hover:text-white'
+                    : 'bg-[var(--paper-elevated)] text-slate-400 hover:text-[var(--ink)]'
                 }`}
               >
                 {r}Hz

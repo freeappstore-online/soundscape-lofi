@@ -71,7 +71,7 @@ export const MasterControls: React.FC<MasterControlsProps> = ({
           onClick={() => onVisualizerModeChange('wave')}
           onTouchStart={handleTouchUnlock}
           className={`px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-md sm:rounded-lg transition ${
-            visualizerMode === 'wave' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-white'
+            visualizerMode === 'wave' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
         >
           Waveform
@@ -80,7 +80,7 @@ export const MasterControls: React.FC<MasterControlsProps> = ({
           onClick={() => onVisualizerModeChange('bars')}
           onTouchStart={handleTouchUnlock}
           className={`px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-md sm:rounded-lg transition ${
-            visualizerMode === 'bars' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-white'
+            visualizerMode === 'bars' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
         >
           Spectrum
@@ -89,7 +89,7 @@ export const MasterControls: React.FC<MasterControlsProps> = ({
           onClick={() => onVisualizerModeChange('radial')}
           onTouchStart={handleTouchUnlock}
           className={`px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-md sm:rounded-lg transition ${
-            visualizerMode === 'radial' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-white'
+            visualizerMode === 'radial' ? 'bg-[var(--accent)] text-slate-950 font-bold' : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
         >
           Zen Ripple
@@ -104,7 +104,7 @@ export const MasterControls: React.FC<MasterControlsProps> = ({
           className={`p-1.5 sm:p-2 rounded-lg transition ${
             isMuted
               ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-              : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-white'
+              : 'bg-[var(--paper-elevated)] text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
           title={isMuted ? 'Unmute master' : 'Mute master'}
         >

@@ -116,7 +116,7 @@ export const FocusSleepTimer: React.FC<FocusSleepTimerProps> = ({ onTimerStart, 
           className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5 ${
             activeMode === 'pomodoro'
               ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-              : 'text-[var(--ink-muted)] hover:text-white'
+              : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
         >
           <Timer className="w-3.5 h-3.5" />
@@ -127,7 +127,7 @@ export const FocusSleepTimer: React.FC<FocusSleepTimerProps> = ({ onTimerStart, 
           className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5 ${
             activeMode === 'sleep'
               ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-              : 'text-[var(--ink-muted)] hover:text-white'
+              : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
           }`}
         >
           <Moon className="w-3.5 h-3.5" />

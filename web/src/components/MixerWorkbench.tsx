@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { soundScapeEngine } from '../audio/SoundScapeEngine';
 import { 
@@ -113,21 +113,17 @@ export default function MixerWorkbench() {
     }
   });
 
-  const handleSetZoom = (scale: number) => {
+  const handleSetZoom = useCallback((scale: number) => {
     setAppScale(scale);
     try {
       localStorage.setItem('soundscape_app_scale_v2', scale.toString());
     } catch {}
-    document.documentElement.style.setProperty('--app-scale', scale.toString());
-    const rootEl = document.getElementById('root');
-    if (rootEl) {
-      rootEl.style.setProperty('--app-scale', scale.toString());
-    }
-  };
+    document.documentElement.style.fontSize = `${scale * 100}%`;
+  }, []);
 
   useEffect(() => {
     handleSetZoom(appScale);
-  }, []);
+  }, [appScale, handleSetZoom]);
 
   // Prevent background scrolling & support Escape key when timer modal is open
   useEffect(() => {
@@ -186,19 +182,6 @@ export default function MixerWorkbench() {
     };
   }, []);
 
-  // Handle Play / Pause toggle
-  const handleTogglePlay = async () => {
-    await soundScapeEngine.resumeContext();
-    if (isPlaying) {
-      soundScapeEngine.pause();
-      setIsPlaying(false);
-    } else {
-      await soundScapeEngine.start();
-      setIsPlaying(true);
-      syncAudioNodes(channels);
-    }
-  };
-
   // Synchronize state with Web Audio Engine
   const syncAudioNodes = useCallback((currentChannels: SoundChannelState[]) => {
     const hasSolo = currentChannels.some(c => c.solo);
@@ -227,9 +210,22 @@ export default function MixerWorkbench() {
     });
   }, []);
 
+  // Handle Play / Pause toggle
+  const handleTogglePlay = async () => {
+    await soundScapeEngine.resumeContext();
+    if (isPlaying) {
+      soundScapeEngine.pause();
+      setIsPlaying(false);
+    } else {
+      await soundScapeEngine.start();
+      setIsPlaying(true);
+      syncAudioNodes(channels);
+    }
+  };
+
   // Sleep Timer Countdown & 60-Second Exponential Fade
   useEffect(() => {
-    let interval: any;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (isSleepTimerActive && sleepTimerSecondsLeft !== null && sleepTimerSecondsLeft > 0) {
       interval = setInterval(() => {
         setSleepTimerSecondsLeft(prev => {
@@ -254,7 +250,9 @@ export default function MixerWorkbench() {
         });
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isSleepTimerActive, sleepTimerSecondsLeft, isSleepTimerFading]);
 
   const handleCancelSleepTimer = () => {
@@ -482,6 +480,7 @@ export default function MixerWorkbench() {
 
   const hasSolo = channels.some(c => c.solo);
   const activeCount = channels.filter(c => c.volume > 0 && !c.muted).length;
+  const activeAccentText = theme === 'dark' ? 'text-slate-950' : 'text-white';
 
   // Filtered channel view
   const visibleChannels = useMemo(() => {
@@ -502,17 +501,17 @@ export default function MixerWorkbench() {
   return (
     <div className="w-full flex flex-col bg-[var(--paper)] text-[var(--ink)] font-sans overflow-x-hidden relative text-[13px] sm:text-sm rounded-2xl border border-[var(--line)]">
       {/* 1. Header */}
-      <header className="h-12 sm:h-14 px-2.5 sm:px-6 border-b border-[var(--line)] bg-[var(--paper-card)] flex items-center justify-between shrink-0 relative z-10 gap-2 rounded-t-2xl">
+      <header className="min-h-12 sm:min-h-14 px-2.5 sm:px-6 py-2 border-b border-[var(--line)] bg-[var(--paper-card)] flex flex-wrap items-center justify-between shrink-0 relative z-10 gap-2 rounded-t-2xl">
         {/* Zone 1: Wordmark */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[var(--accent)] text-slate-950 flex items-center justify-center font-bold shadow-xs">
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[var(--accent)] ${activeAccentText} flex items-center justify-center font-bold shadow-xs`}>
             <Headphones className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
           <div className="flex items-baseline gap-1.5 sm:gap-2">
             <span className="font-serif-heading text-base sm:text-lg lg:text-xl font-bold tracking-tight text-[var(--ink)]">
               SoundScape
             </span>
-            <span className="hidden sm:inline text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[var(--accent)] font-semibold">
+            <span className="hidden sm:inline text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[var(--accent)] font-semibold whitespace-nowrap">
               Lo-Fi Focus ({channels.length})
             </span>
           </div>
@@ -521,25 +520,25 @@ export default function MixerWorkbench() {
         {/* Zone 2: Navigation / Info */}
         <div className="flex items-center gap-2 text-xs text-[var(--ink-muted)] font-mono">
           {isSleepTimerActive && sleepTimerSecondsLeft !== null ? (
-            <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-indigo-950/60 border border-indigo-500/40 text-indigo-300 shadow-sm text-[10px] sm:text-xs animate-in fade-in">
-              <Moon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-400 ${isSleepTimerFading ? 'animate-pulse text-amber-300' : ''}`} />
-              <span className="font-semibold text-slate-100">
+            <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-indigo-950/80 border border-indigo-500/40 text-indigo-200 shadow-sm text-[10px] sm:text-xs">
+              <Moon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-400 shrink-0 ${isSleepTimerFading ? 'animate-pulse text-amber-300' : ''}`} />
+              <span className="font-semibold text-white whitespace-nowrap">
                 Sleep: {Math.floor(sleepTimerSecondsLeft / 60)}:{(sleepTimerSecondsLeft % 60).toString().padStart(2, '0')}
               </span>
               {isSleepTimerFading && (
-                <span className="hidden sm:inline text-[10px] text-amber-300 font-bold animate-pulse">
+                <span className="hidden sm:inline text-[10px] text-amber-300 font-bold animate-pulse whitespace-nowrap">
                   (Fading 60s...)
                 </span>
               )}
               <button
                 onClick={handleCancelSleepTimer}
-                className="text-[9px] sm:text-[10px] text-rose-300 hover:text-rose-100 px-1 py-0.2 rounded bg-rose-500/20 hover:bg-rose-500/40 transition"
+                className="text-[9px] sm:text-[10px] text-rose-200 hover:text-[var(--ink)] px-1.5 py-0.5 rounded bg-rose-500/30 hover:bg-rose-500/50 transition whitespace-nowrap"
               >
                 Cancel
               </button>
             </div>
           ) : (
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="hidden xl:flex items-center gap-3">
               <span>{channels.length} Procedural Channels</span>
               <span aria-hidden="true">·</span>
               <span>Delta Sleep Entrainment (1.8Hz)</span>
@@ -550,7 +549,7 @@ export default function MixerWorkbench() {
         </div>
 
         {/* Zone 3: Primary Controls */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 ml-auto shrink-0">
           {/* Dynamic Zoom Toggle */}
           <div className="flex items-center bg-[var(--paper-elevated)] p-0.5 rounded-lg border border-[var(--line)] text-[10px] sm:text-[11px] font-mono shrink-0">
             <span className="hidden md:inline px-1.5 text-[10px] text-[var(--ink-muted)] font-semibold select-none">
@@ -558,10 +557,10 @@ export default function MixerWorkbench() {
             </span>
             <button
               onClick={() => handleSetZoom(0.75)}
-              className={`px-1.5 py-0.5 rounded transition ${
+              className={`px-1.5 py-0.5 rounded transition whitespace-nowrap ${
                 appScale === 0.75
-                  ? 'bg-[var(--accent)] text-slate-950 font-bold shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} font-bold shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
               title="Zoom out: 75% scale"
             >
@@ -570,10 +569,10 @@ export default function MixerWorkbench() {
             <span className="text-[var(--line)] select-none">|</span>
             <button
               onClick={() => handleSetZoom(1.0)}
-              className={`px-1.5 py-0.5 rounded transition ${
+              className={`px-1.5 py-0.5 rounded transition whitespace-nowrap ${
                 appScale === 1.0
-                  ? 'bg-[var(--accent)] text-slate-950 font-bold shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} font-bold shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
               title="100% default zoom (Standard)"
             >
@@ -582,10 +581,10 @@ export default function MixerWorkbench() {
             <span className="text-[var(--line)] select-none">|</span>
             <button
               onClick={() => handleSetZoom(1.25)}
-              className={`px-1.5 py-0.5 rounded transition ${
+              className={`px-1.5 py-0.5 rounded transition whitespace-nowrap ${
                 appScale === 1.25
-                  ? 'bg-[var(--accent)] text-slate-950 font-bold shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} font-bold shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
               title="Zoom in: 125% scale for readability"
             >
@@ -594,19 +593,19 @@ export default function MixerWorkbench() {
           </div>
 
           {/* Timer Drawer Button */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setShowTimerModal(!showTimerModal)}
               aria-expanded={showTimerModal}
               aria-haspopup="dialog"
-              className={`flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition border ${
+              className={`flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap shrink-0 transition border ${
                 showTimerModal
-                  ? 'bg-[var(--accent)] text-slate-950 border-[var(--accent)] shadow-xs'
-                  : 'bg-[var(--paper-elevated)] border-[var(--line)] text-[var(--ink)] hover:border-slate-500'
+                  ? `bg-[var(--accent)] ${activeAccentText} border-[var(--accent)] shadow-xs`
+                  : 'bg-[var(--paper-elevated)] border-[var(--line)] text-[var(--ink)] hover:border-[var(--accent)]'
               }`}
             >
-              <Timer className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span className="hidden sm:inline">Focus Timers</span>
+              <Timer className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Focus Timers</span>
             </button>
             {showTimerModal && (
               <div 
@@ -620,18 +619,22 @@ export default function MixerWorkbench() {
           <button
             onClick={handleResetMix}
             title="Reset all channel volumes to zero"
-            className="p-1 sm:p-1.5 rounded-lg bg-[var(--paper-elevated)] border border-[var(--line)] text-[var(--ink-muted)] hover:text-white transition"
+            className="p-1.5 rounded-lg bg-[var(--paper-elevated)] border border-[var(--line)] text-[var(--ink-muted)] hover:text-[var(--ink)] hover:border-[var(--accent)] transition shrink-0"
           >
-            <RotateCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
 
           {/* Dark / Light Mode Toggle */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-1 sm:p-1.5 rounded-lg bg-[var(--paper-elevated)] border border-[var(--line)] text-[var(--ink-muted)] hover:text-white transition"
+            className="p-1.5 rounded-lg bg-[var(--paper-elevated)] border border-[var(--line)] text-[var(--ink)] hover:border-[var(--accent)] transition shrink-0"
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
-            {theme === 'dark' ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-slate-700" />
+            )}
           </button>
         </div>
       </header>
@@ -686,55 +689,55 @@ export default function MixerWorkbench() {
               onClick={() => setSelectedCategory('all')}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                 selectedCategory === 'all'
-                  ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
             >
-              <Layers className="w-3.5 h-3.5" />
+              <Layers className="w-3.5 h-3.5 shrink-0" />
               <span>All ({categoryCounts.all})</span>
             </button>
             <button
               onClick={() => setSelectedCategory('noise')}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                 selectedCategory === 'noise'
-                  ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
             >
-              <Radio className="w-3.5 h-3.5" />
+              <Radio className="w-3.5 h-3.5 shrink-0" />
               <span>Noise ({categoryCounts.noise})</span>
             </button>
             <button
               onClick={() => setSelectedCategory('nature')}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                 selectedCategory === 'nature'
-                  ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
             >
-              <CloudRain className="w-3.5 h-3.5" />
+              <CloudRain className="w-3.5 h-3.5 shrink-0" />
               <span>Nature ({categoryCounts.nature})</span>
             </button>
             <button
               onClick={() => setSelectedCategory('ambience')}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                 selectedCategory === 'ambience'
-                  ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
             >
-              <Coffee className="w-3.5 h-3.5" />
+              <Coffee className="w-3.5 h-3.5 shrink-0" />
               <span>Ambience ({categoryCounts.ambience})</span>
             </button>
             <button
               onClick={() => setSelectedCategory('neuro')}
               className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                 selectedCategory === 'neuro'
-                  ? 'bg-[var(--accent)] text-slate-950 shadow-xs'
-                  : 'text-[var(--ink-muted)] hover:text-white'
+                  ? `bg-[var(--accent)] ${activeAccentText} shadow-xs`
+                  : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
               }`}
             >
-              <Brain className="w-3.5 h-3.5" />
+              <Brain className="w-3.5 h-3.5 shrink-0" />
               <span>Neuroscience ({categoryCounts.neuro})</span>
             </button>
           </div>

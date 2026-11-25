@@ -214,7 +214,7 @@ export const PresetSelector: React.FC<PresetSelectorProps> = ({
             className={`px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition flex items-center gap-1.5 sm:gap-2 ${
               activeTab === 'neuro'
                 ? 'bg-violet-500 text-white shadow-md'
-                : 'text-[var(--ink-muted)] hover:text-white'
+                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
             }`}
           >
             <Brain className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -225,7 +225,7 @@ export const PresetSelector: React.FC<PresetSelectorProps> = ({
             className={`px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition flex items-center gap-1.5 sm:gap-2 ${
               activeTab === 'environments'
                 ? 'bg-[var(--accent)] text-slate-950 shadow-md font-extrabold'
-                : 'text-[var(--ink-muted)] hover:text-white'
+                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
             }`}
           >
             <Compass className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -245,7 +245,7 @@ export const PresetSelector: React.FC<PresetSelectorProps> = ({
           ) : (
             <button
               onClick={() => setIsSaving(false)}
-              className="text-[11px] sm:text-xs text-[var(--ink-muted)] hover:text-white"
+              className="text-[11px] sm:text-xs text-[var(--ink-muted)] hover:text-[var(--ink)]"
             >
               Cancel
             </button>
@@ -323,7 +323,7 @@ export const PresetSelector: React.FC<PresetSelectorProps> = ({
                   className={`font-semibold flex items-center gap-1 transition ${
                     isSelected 
                       ? activeTab === 'neuro' ? 'text-violet-300' : 'text-[var(--accent)]'
-                      : 'text-[var(--ink-muted)] hover:text-white'
+                      : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
                   }`}
                 >
                   <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current" />
